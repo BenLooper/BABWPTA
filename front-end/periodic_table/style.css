@@ -48,7 +48,8 @@ body {
 .at_details {
   position: absolute;
   font-size: 4px;
-  color: rgba(255, 255, 255, 0.5);
+  /* color: rgba(255, 255, 255, 0.5); */
+  color: #24252b
   opacity: 0;
 }
 .at_num {
@@ -64,7 +65,8 @@ body {
   font-size: 9px;
   line-height: 1;
   height: 9px;
-  color: rgba(255, 255, 255, 0.9);
+  /* color: rgba(255, 255, 255, 0.9); */
+  color: #24252b
 }
 .at_details {
   bottom: 4px;
@@ -155,7 +157,8 @@ body {
     font-weight: bold;
     line-height: 30px;
     height: 30px;
-    color: rgba(255, 255, 255, 0.75);
+    /* color: rgba(255, 255, 255, 0.75); */
+    color: #24252b
     text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
   }
 }
@@ -191,3 +194,6 @@ body {
     font-size: 30px;
   }
 }
+
+body {background-color: #16161a;}
+
