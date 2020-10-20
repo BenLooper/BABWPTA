@@ -6,13 +6,13 @@ let sessionsUrl = '/sessions'
 
 
 
-loginBtn.addEventListener('click', function(){
-    addLoginForm();
-})
+// loginBtn.addEventListener('click', function(){
+//     addLoginForm();
+// })
 
-createAccountBtn.addEventListener('click', function(){
-    console.log('hey')
-})
+// createAccountBtn.addEventListener('click', function(){
+//     console.log('hey')
+// })
 
 
 //Creates form to login with, currently appends the form to bottom of the table on button click
@@ -68,3 +68,70 @@ function logIn(inputForm){
 function createEl(el){
     return document.createElement(el)
 }
+
+
+//login button
+const loginCell = document.querySelector("#login-cell")
+let loginButton = document.createElement('button')
+loginButton.innerText = "Login"
+loginButton.id = "login-button"
+loginCell.append(loginButton)
+
+//logout button
+const logoutCell = document.querySelector("#logout-cell")
+let logoutButton = document.createElement('button')
+logoutButton.innerText = "Logout"
+logoutButton.id = "logout-button"
+logoutCell.append(logoutButton)
+
+//signup button
+const signupCell = document.querySelector("#signup-cell")
+let signupButton = document.createElement('button')
+signupButton.innerText = "Sign Up"
+signupButton.id = "signup-button"
+signupCell.append(signupButton)
+
+
+//start game button
+const gameCell = document.querySelector("#game-cell")
+let gameButton = document.createElement('button')
+gameButton.innerText = "Start Game"
+gameButton.id = "game-button"
+gameCell.append(gameButton)
+
+//score button
+const scoreCell = document.querySelector("#score-cell")
+let scoreButton = document.createElement('button')
+// scoreButton.innerText = `score: ${game.score}`
+scoreButton.innerText = "Score: 0"
+scoreButton.id = "score-button"
+scoreCell.append(scoreButton)
+
+//timer
+function startTimer(duration, display) {
+    let timer = duration, minutes, seconds;
+    let timerButton = document.createElement('button')
+        timerButton.id = "timer-button"
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        // minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        // display.textContent = minutes + ":" + seconds;
+        display.textContent = `Remaining ${seconds} secs`;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+
+window.onload = function () {
+    let thirtySeconds = 30,
+        timerCell = document.querySelector('#timer-cell');
+    startTimer(thirtySeconds, timerCell);
+};
+
+
