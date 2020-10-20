@@ -20,6 +20,13 @@ body {
   width: 5.55%;
   height: 100%;
 }
+.button {
+  float: left;
+  position: relative;
+  background-color: rgba(0, 160, 96, 0.6);
+  width: 5.55%;
+  height: 100%;
+}
 .element {
   position: absolute;
   top: 0;
