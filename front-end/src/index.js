@@ -1,18 +1,11 @@
+//Global Variables
 let table = document.querySelector('.periodic')
-let loginBtn = document.querySelectorAll('.button')[0]
-let createAccountBtn = document.querySelectorAll('.button')[1]
+
+//URLs
 let baseUrl = 'http://localhost:3000'
 let sessionsUrl = '/sessions'
 
 
-
-// loginBtn.addEventListener('click', function(){
-//     addLoginForm();
-// })
-
-// createAccountBtn.addEventListener('click', function(){
-//     console.log('hey')
-// })
 
 
 //Creates form to login with, currently appends the form to bottom of the table on button click
