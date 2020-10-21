@@ -50,7 +50,7 @@ scoreCell.append(scoreButton)
 
 //sets up table for quiz mode 
 function quizModeOn(){
-    
+
     //start the timer 
     let thirtySeconds = 30,
     timerCell = document.querySelector('#timer-cell');
@@ -158,7 +158,7 @@ function removeCellListeners(){
         cell.removeEventListener('click',checkHandler)
     }
 }
-    
+
 
 //Get the array of element names by parsing the text in at_details for each element
 function getElementNames(){
