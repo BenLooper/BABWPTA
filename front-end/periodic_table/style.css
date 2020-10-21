@@ -84,6 +84,12 @@ body {
   width: 5.55%;
   height: 100%;
 }
+.app-cell {
+  float: left;
+  position: relative;
+  width: 5.55%;
+  height: 100%;
+}
 .button {
   float: left;
   position: relative;
