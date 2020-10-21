@@ -100,21 +100,16 @@ scoreButton.innerText = "Score: 0"
 scoreButton.id = "score-button"
 scoreCell.append(scoreButton)
 
-//timer
+//timer countdown
 function startTimer(duration, display) {
     let timer = duration, minutes, seconds;
     let timerButton = document.createElement('button')
         timerButton.id = "timer-button"
+
     setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
-
-        // minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        // display.textContent = minutes + ":" + seconds;
-        display.textContent = `Remaining ${seconds} secs`;
-
+        display.textContent = `Time Left: ${seconds} secs`;
         if (--timer < 0) {
             timer = duration;
         }
