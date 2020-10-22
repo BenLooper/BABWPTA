@@ -1,6 +1,8 @@
 //Global Variables
 const table = document.querySelector('.periodic')
 const elementDetails = document.querySelectorAll('.at_details')
+const highScoreCell = document.querySelector("#high-cell")
+const profileDetailsCell = document.querySelector("#profile-cell")
 
 
 //URLs
@@ -15,6 +17,7 @@ const loginCell = document.querySelector("#login-cell")
 let loginButton = document.createElement('button')
 loginButton.innerText = "Login"
 loginButton.id = "login-button"
+loginButton.addEventListener('click', () => addLoginForm())
 loginCell.append(loginButton)
 
 //logout button
@@ -78,7 +81,7 @@ function quizModeOn(){
 
 //Undoes everything that quizModeOn did to the DOM
 function quizModeOff(runTimer){
-
+ 
     //stops the function that setTimer runs in quizModeOn
     clearInterval(runTimer)
     
@@ -91,6 +94,88 @@ function quizModeOff(runTimer){
 
     //un-hides the text by undoing the font-size change 
     elementDetails.forEach(element => element.style = '')
+}
+
+
+//Creates form to login with, currently appends the form to bottom of the table on button click
+function addLoginForm(){
+    let form = createEl('form')
+    form.id = 'login-form'
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        logIn(e.target);
+    })
+
+    let userInput = createEl('input')
+    userInput.id = 'user'
+    userInput.type = 'text'
+
+    let passInput = createEl('input')
+    passInput.id = 'pass'
+    passInput.type = 'password'
+
+    let submit = createEl('input')
+    submit.type = 'submit'
+
+    form.append(userInput,passInput,submit)
+    table.append(form)
+}
+
+
+//Based on login info, either logs a user in and populates page w/their data
+//or returns "user not found"
+function logIn(inputForm){
+    fetch(`${baseUrl}${sessionsUrl}`, {
+        method:"POST",
+        headers: {
+            "Content-Type":"application/json",
+            Accept:"application/json"
+        },
+        body: JSON.stringify({
+            "username":inputForm.user.value,
+            "password":inputForm.pass.value
+        })
+    })
+    .then(res=>res.json())
+    .then(user => {
+        if (!user.error) {
+            // console.log(user)
+            renderProfileDetails(user);
+            inputForm.remove();
+        }
+        else{
+            inputForm.append(user.error)
+        }
+    })
+}
+
+
+//populates page with user specific data 
+function renderProfileDetails(user){
+    
+    let profileElement = document.createElement('div')
+    profileElement.className = "element"
+
+    let profileDetailsDiv = document.createElement('div')
+    profileDetailsDiv.className = "at_details"
+    
+    let description = document.createElement('p')
+    
+    let name = document.createElement('p')
+    name.innerText = `Welcome, ${user.name}! Profile Details:`
+    
+    let image = document.createElement('img')
+    image.src = user.image_url
+    image.id = "profile-pic"
+    
+    let username = createEl('p')
+    username.innerText = `Email: ${user.username}`
+    
+    profileDetailsDiv.append(description, name, username, image)
+    profileElement.append(profileDetailsDiv)
+    profileDetailsCell.append(profileElement)
+
+    highScoreCell.innerText = `High Score: ${(highestScore(user.games))}`
 }
 
 
@@ -212,6 +297,16 @@ function startTimer(duration, display) {
 }
 
 
+//iterates through a user's game instance, returning the highest scoring game 
+function highestScore(games){
+    let currentHigh = 0 
+    for (const game of games){
+        currentHigh = Math.max(currentHigh, game.score)
+    }
+    return currentHigh
+}
+
+
 //returns a random 
 //used to get a random index from the element name array 
 function getRandomInt(max) {
@@ -225,52 +320,5 @@ function createEl(el){
 }
 
 
-//Creates form to login with, currently appends the form to bottom of the table on button click
-function addLoginForm(){
-    let form = createEl('form')
-    form.id = 'login-form'
-    form.addEventListener('submit', function(e){
-        e.preventDefault();
-        logIn(e.target);
-    })
-
-    let userInput = createEl('input')
-    userInput.id = 'user'
-    userInput.type = 'text'
-
-    let passInput = createEl('input')
-    passInput.id = 'pass'
-    passInput.type = 'password'
-
-    let submit = createEl('input')
-    submit.type = 'submit'
-
-    form.append(userInput,passInput,submit)
-    table.append(form)
-}
 
 
-//Based on login info, either logs a user in and populates page w/their data
-//or returns "user not found"
-function logIn(inputForm){
-    fetch(`${baseUrl}${sessionsUrl}`, {
-        method:"POST",
-        headers: {
-            "Content-Type":"application/json",
-            Accept:"application/json"
-        },
-        body: JSON.stringify({
-            "username":inputForm.user.value,
-            "password":inputForm.pass.value
-        })
-    })
-    .then(res=>res.json())
-    .then(user => {
-        if (!user.error) {
-            console.log(user)
-        }
-        else{
-            inputForm.append(user.error)
-        }
-    })
-}
