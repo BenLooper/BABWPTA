@@ -3,15 +3,19 @@ const table = document.querySelector('.periodic')
 const elementDetails = document.querySelectorAll('.at_details')
 const highScoreCell = document.querySelector("#high-cell")
 const profileDetailsCell = document.querySelector("#profile-cell")
+const reactionCell = document.querySelector('#reaction-cell')
 
+//Session ID
+let sessionID 
 
 //URLs
-let baseUrl = 'http://localhost:3000'
-let sessionsUrl = '/sessions'
+const baseUrl = 'http://localhost:3000'
+const sessionsUrl = '/sessions'
+const gamesUrl = '/games' 
+const usersUrl = '/users'
 
 
 //login button
-//TODO add listener that makes login form appear
 //TODO make login form not ugly 
 const loginCell = document.querySelector("#login-cell")
 let loginButton = document.createElement('button')
@@ -32,6 +36,7 @@ const signupCell = document.querySelector("#signup-cell")
 let signupButton = document.createElement('button')
 signupButton.innerText = "Sign Up"
 signupButton.id = "signup-button"
+signupButton.addEventListener('click', () => addSignUpForm())
 signupCell.append(signupButton)
 
 //start game button
@@ -55,7 +60,7 @@ scoreCell.append(scoreButton)
 function quizModeOn(){
 
     //start the timer 
-    let thirtySeconds = 30,
+    let thirtySeconds = 10,
     timerCell = document.querySelector('#timer-cell');
     startTimer(thirtySeconds, timerCell);
 
@@ -80,20 +85,30 @@ function quizModeOn(){
 
 
 //Undoes everything that quizModeOn did to the DOM
+//After 10 seconds, saves the game with whatever reaction was chose ('' if none)
 function quizModeOff(runTimer){
- 
+    
     //stops the function that setTimer runs in quizModeOn
-    clearInterval(runTimer)
+    clearInterval(runTimer);
     
     //set the timer cell (otherwise it just says 0 seconds left)
     timerCell = document.querySelector('#timer-cell');
     timerCell.textContent = "TIME UP"
+
+    //choose a reaction for the last quiz 
+    renderReactionSelection();
 
     //remove event listeners from the cells
     removeCellListeners();
 
     //un-hides the text by undoing the font-size change 
     elementDetails.forEach(element => element.style = '')
+
+    
+    
+    //submits the score and reaction choice after 5 seconds
+    setTimeout(saveGameHandler,5000);
+
 }
 
 
@@ -141,6 +156,7 @@ function logIn(inputForm){
         if (!user.error) {
             // console.log(user)
             renderProfileDetails(user);
+            sessionID = user.id
             inputForm.remove();
         }
         else{
@@ -176,6 +192,105 @@ function renderProfileDetails(user){
     profileDetailsCell.append(profileElement)
 
     highScoreCell.innerText = `High Score: ${(highestScore(user.games))}`
+}
+
+
+//Creates form to login with, currently appends the form to bottom of the table on button click
+function addSignUpForm(){
+    let form = createEl('form')
+    form.id = 'login-form'
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        signUp(e.target);
+    })
+
+    let userNameInput = createEl('input')
+    userNameInput.id = 'username'
+    userNameInput.type = 'text'
+    userNameInput.placeholder = "Enter a valid email address"
+
+    let nameInput = createEl('input')
+    nameInput.id = 'name'
+    nameInput.type = 'text'
+    nameInput.placeholder = "Enter your name"
+
+    let imageInput = createEl('input')
+    imageInput.id = 'image'
+    imageInput.type = 'text'
+    imageInput.placeholder = "Profile Picture URL"
+
+    let passInput = createEl('input')
+    passInput.id = 'pass'
+    passInput.type = 'password'
+    passInput.placeholder = "Enter password"
+
+    let passConfInput = createEl('input')
+    passConfInput.id = 'passConf'
+    passConfInput.type = 'password'
+    passConfInput.placeholder = "Confirm password"
+
+    let submit = createEl('input')
+    submit.type = 'submit'
+
+    form.append(userNameInput,nameInput,imageInput,passInput,passConfInput,submit)
+    table.append(form)
+}
+
+
+//Based on login info, either logs a user in and populates page w/their data
+//or returns "user not found"
+function signUp(inputForm){
+    fetch(`${baseUrl}${usersUrl}`, {
+        method:"POST",
+        headers: {
+            "Content-Type":"application/json",
+            Accept:"application/json"
+        },
+        body: JSON.stringify({
+            username:inputForm.username.value,
+            name: inputForm.name.value,
+            password: inputForm.pass.value,
+            passConf: inputForm.passConf.value,
+            image_url: inputForm.image.value
+        })
+    })
+    .then(res=>res.json())
+    .then(user => {
+        renderProfileDetails(user);
+        sessionID = user.id
+        inputForm.remove();
+    })
+}
+
+
+//creates new game instance after a quiz is completed 
+const saveGameHandler = function saveGame(){
+    
+    //get chosen reaction 
+    let reaction = reactionCell.children[1].value
+    
+    //get ending score 
+    let finalScore = parseInt(scoreButton.innerText.match(/\d/))
+    
+    //remove option to react 
+    reactionCell.innerText = ''
+
+    fetch(`${baseUrl}${gamesUrl}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            "score": finalScore,
+            "reaction": reaction,
+            "user_id": sessionID
+        })
+    })
+    .then(res => res.json())
+    .then(games => {
+        highScoreCell.innerText = `High Score: ${(highestScore(games))}`
+    })
 }
 
 
@@ -270,7 +385,8 @@ function assignRandomElement(names){
 
     //populate answer-cell with a randomly indexed element from the names array
     let answer = document.querySelector('#answer-cell')
-    answer.innerText = (names[getRandomInt(names.length)])
+    //randomly selects by doing (length - somenumber) -- 70 here to make it easier
+    answer.innerText = (names[getRandomInt(names.length-70)])
 
     //this capitalizes the word...I only did this because I knew it'd drive you crazy if it was all lowercase
     answer.innerText = answer.innerText.replace(answer.innerText[0],answer.innerText[0].toUpperCase())
@@ -306,6 +422,31 @@ function highestScore(games){
     return currentHigh
 }
 
+
+//renders reaction selection in reaction cell
+function renderReactionSelection(){
+
+    let selectionLabel = document.createElement('label')
+    selectionLabel.innerText = "Reaction:"
+    
+    let reactions = ['😤', '🤓', '🤬', '😩', '😭', '😎']
+    let reactionSelection = makeReactionList(reactions)
+    
+    reactionCell.append(selectionLabel,reactionSelection)
+}
+
+//given an array of strings, makes a selection list of those items
+function makeReactionList(reactions){
+    let select = document.createElement('select')
+    
+    for (const reaction of reactions){
+        let option = document.createElement('option')
+        option.innerText = reaction 
+        select.append(option)
+    }
+
+    return select
+}
 
 //returns a random 
 //used to get a random index from the element name array 
