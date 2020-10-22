@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < ActionController::API
 
     def index
         users = User.all
@@ -20,4 +20,20 @@ class UsersController < ApplicationController
         end 
     end 
 
+    def update 
+        user = User.find(params[:id])
+
+        user.update(
+            name:params[:name],
+            username:params[:username],
+            image_url:params[:image_url]
+        )
+
+        render json: user, include: [:games], except: [:password_digest,:updated_at,:created_at]
+    end 
+
+    def destroy 
+        User.destroy(params[:id])
+    end 
+    
 end
