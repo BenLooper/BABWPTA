@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_10_19_203425) do
-  
+
   create_table "games", force: :cascade do |t|
     t.integer "score"
     t.string "reaction"

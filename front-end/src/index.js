@@ -5,6 +5,7 @@ const highScoreCell = document.querySelector("#high-cell")
 const profileDetailsCell = document.querySelector("#profile-cell")
 const reactionCell = document.querySelector('#reaction-cell')
 const profilePicCell = document.querySelector("#profile-pic-cell")
+const gameHistoryCell = document.querySelector("#game-hist-cell")
 
 //Session ID
 let sessionID 
@@ -17,7 +18,6 @@ const usersUrl = '/users'
 
 
 //login button
-//TODO make login form not ugly 
 const loginCell = document.querySelector("#login-cell")
 let loginButton = document.createElement('button')
 loginButton.innerText = "Login"
@@ -52,10 +52,22 @@ gameCell.append(gameButton)
 //score button
 const scoreCell = document.querySelector("#score-cell")
 let scoreButton = document.createElement('button')
-// scoreButton.innerText = `score: ${game.score}`
 scoreButton.innerText = "Score: 0"
 scoreButton.id = "score-button"
 scoreCell.append(scoreButton)
+
+//edit profile button
+let editProfileButton = document.createElement('button')
+editProfileButton.innerText = "Profile"
+editProfileButton.id = "edit-profile-button"
+profileDetailsCell.append(editProfileButton)
+
+
+//edit game history button
+let viewGamesButton = document.createElement('button')
+viewGamesButton.innerText = "Games"
+viewGamesButton.id = "game-hist-button"
+gameHistoryCell.append(viewGamesButton)
 
 
 //sets up table for quiz mode 
@@ -173,16 +185,13 @@ function logIn(inputForm){
 //populates page with user specific data 
 function renderProfileDetails(user){
     
-    let profileElement = document.createElement('div')
-    profileElement.className = "element"
+    // let profileElement = document.createElement('div')
+    // profileElement.className = "element"
 
-    let profileDetailsDiv = document.createElement('div')
-    profileDetailsDiv.className = "at_details"
-    
-    let description = document.createElement('p')
-    
-    let name = document.createElement('p')
-    name.innerText = "Welcome, " + user.name + "!" + '\n' + "Click this tile to edit your profile"
+    // let profileDetailsDiv = document.createElement('div')
+    // profileDetailsDiv.className = "at_details"    
+    // let name = document.createElement('p')
+    // name.innerText = "Welcome, " + user.name + "!" + '\n' + "Click this tile to edit your profile"
     
     let image = document.createElement('img')
     image.src = user.image_url
@@ -223,30 +232,31 @@ function addSignUpForm(){
     let userNameInput = createEl('input')
     userNameInput.id = 'username'
     userNameInput.type = 'text'
-    userNameInput.placeholder = "Enter a valid email address"
+    userNameInput.placeholder = "Enter Valid Email Address"
 
     let nameInput = createEl('input')
     nameInput.id = 'name'
     nameInput.type = 'text'
-    nameInput.placeholder = "Enter your name"
+    nameInput.placeholder = "Enter Name"
 
     let imageInput = createEl('input')
     imageInput.id = 'image'
     imageInput.type = 'text'
-    imageInput.placeholder = "Profile Picture URL"
+    imageInput.placeholder = "Enter Profile Picture URL"
 
     let passInput = createEl('input')
-    passInput.id = 'pass'
+    passInput.id = 'passInit'
     passInput.type = 'password'
-    passInput.placeholder = "Enter password"
+    passInput.placeholder = "Enter Password"
 
     let passConfInput = createEl('input')
     passConfInput.id = 'passConf'
     passConfInput.type = 'password'
-    passConfInput.placeholder = "Confirm password"
+    passConfInput.placeholder = "Confirm Password"
 
     let submit = createEl('input')
     submit.type = 'submit'
+    submit.id = "create-submit-btn"
 
     form.append(userNameInput,nameInput,imageInput,passInput,passConfInput,submit)
     table.append(form)
@@ -429,7 +439,7 @@ function startTimer(duration, display) {
     runTimer = setInterval(function () {
         seconds = parseInt(timer % 60, 10);
         seconds = seconds < 10 ? "0" + seconds : seconds;
-        display.textContent = `Time Left: ${seconds} secs`;
+        display.textContent = "Time Left: " + '\n' + seconds + "sec";
         if (--timer < 0) {
             // timer = duration;
             quizModeOff(runTimer);
