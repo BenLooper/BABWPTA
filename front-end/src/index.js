@@ -96,7 +96,6 @@ function quizModeOff(runTimer){
     elementDetails.forEach(element => element.style = '')
 }
 
-
 //Creates form to login with, currently appends the form to bottom of the table on button click
 function addLoginForm(){
     let form = createEl('form')
@@ -109,15 +108,18 @@ function addLoginForm(){
     let userInput = createEl('input')
     userInput.id = 'user'
     userInput.type = 'text'
+    userInput.placeholder = "Enter Email Address"
 
     let passInput = createEl('input')
     passInput.id = 'pass'
     passInput.type = 'password'
+    passInput.placeholder = "Enter Password"
 
     let submit = createEl('input')
     submit.type = 'submit'
+    submit.id = 'submit-btn'
 
-    form.append(userInput,passInput,submit)
+    form.append(userInput, passInput, submit)
     table.append(form)
 }
 
@@ -162,7 +164,7 @@ function renderProfileDetails(user){
     let description = document.createElement('p')
     
     let name = document.createElement('p')
-    name.innerText = `Welcome, ${user.name}! Profile Details:`
+    name.innerText = "Welcome, " + user.name + "!" + '\n' + "Click this tile to edit your profile"
     
     let image = document.createElement('img')
     image.src = user.image_url
@@ -171,10 +173,23 @@ function renderProfileDetails(user){
     let username = createEl('p')
     username.innerText = `Email: ${user.username}`
     
-    profileDetailsDiv.append(description, name, username, image)
+    profileDetailsDiv.append(description, name, username)
     profileElement.append(profileDetailsDiv)
     profileDetailsCell.append(profileElement)
 
+    //profile pic cell
+    let profilePicCell = document.querySelector("#profile-pic-cell")
+    let profilePicElement = document.createElement('div')
+    // profilePicElement.className = "element"
+
+    let profilePicDiv = document.createElement('div')
+    profilePicDiv.className = "at_details"
+
+    profilePicDiv.append(image)
+    profilePicElement.append(profilePicDiv)
+    profilePicCell.append(profilePicElement)
+
+    //high score cell's inner text
     highScoreCell.innerText = `High Score: ${(highestScore(user.games))}`
 }
 
