@@ -4,11 +4,12 @@ class SessionsController < ActionController::API
     user = User.find_by username:params[:username]
     if user && user.authenticate(params[:password])
       session[:id] = user.id
-      render json: user
+      render json: user, include: [:games]
     else
       render json: {error:"Incorrect username or password"}
     end
   end 
+    
 end 
 
 
