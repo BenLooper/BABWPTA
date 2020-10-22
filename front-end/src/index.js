@@ -113,7 +113,7 @@ function quizModeOff(runTimer){
     
     //set the timer cell (otherwise it just says 0 seconds left)
     timerCell = document.querySelector('#timer-cell');
-    timerCell.textContent = "TIME UP"
+    timerCell.textContent = "TIME'S UP"
 
     //choose a reaction for the last quiz 
     renderReactionSelection();
@@ -191,38 +191,16 @@ function logIn(inputForm){
 //populates page with user specific data 
 function renderProfileDetails(user){
     
-    // let profileElement = document.createElement('div')
-    // profileElement.className = "element"
-
-    // let profileDetailsDiv = document.createElement('div')
-    // profileDetailsDiv.className = "at_details"    
-    // let name = document.createElement('p')
-    // name.innerText = "Welcome, " + user.name + "!" + '\n' + "Click this tile to edit your profile"
-    
     let image = document.createElement('img')
     image.src = user.image_url
     image.id = "profile-pic"
-    
-    let username = createEl('p')
-    username.innerText = `Email: ${user.username}`
-    
-    profileDetailsDiv.append(description, name, username)
-    profileElement.append(profileDetailsDiv)
-    profileDetailsCell.append(profileElement)
-
-
-    let profilePicElement = document.createElement('div')
-    // profilePicElement.className = "element"
-
-    let profilePicDiv = document.createElement('div')
-    profilePicDiv.className = "at_details"
-
-    profilePicDiv.append(image)
-    profilePicElement.append(profilePicDiv)
-    profilePicCell.append(profilePicElement)
+    profilePicCell.append(image)
 
     //high score cell's inner text
+    highScoreCell.id = "high-score-cell"
     highScoreCell.innerText = `High Score: ${(highestScore(user.games))}`
+
+    
 }
 
 
@@ -306,6 +284,7 @@ const saveGameHandler = function saveGame(){
     
     //remove option to react 
     reactionCell.innerText = ''
+    let highScoreButton = document.querySelector('#high-score-button')
 
     fetch(`${baseUrl}${gamesUrl}`, {
         method: "POST",
@@ -466,6 +445,8 @@ function highestScore(games){
 
 //renders reaction selection in reaction cell
 function renderReactionSelection(){
+
+    reactionCell.id = "reaction-cell"
 
     let selectionLabel = document.createElement('label')
     selectionLabel.innerText = "Reaction:"
