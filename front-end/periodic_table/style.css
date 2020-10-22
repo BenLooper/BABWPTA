@@ -115,7 +115,6 @@ body {
   background-color: #16161a;
   color:#444444;
   border: 2px solid rgba(0, 160, 96, 0.9);
-  cursor:pointer;
   transition-duration: 0.4s;
   border-radius: 3px;
 }
@@ -126,6 +125,20 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+#high-score-cell {
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  padding: 5px 20px;
+  background-color: #16161a;
+  color: #444444;
+  border: 2px solid rgba(0, 160, 96, 0.9);
+  transition-duration: 0.4s;
+  border-radius: 3px;
 }
 
 /* login form */

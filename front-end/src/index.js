@@ -102,7 +102,7 @@ function quizModeOff(runTimer){
     
     //set the timer cell (otherwise it just says 0 seconds left)
     timerCell = document.querySelector('#timer-cell');
-    timerCell.textContent = "TIME UP"
+    timerCell.textContent = "TIME'S UP"
 
     //choose a reaction for the last quiz 
     renderReactionSelection();
@@ -181,7 +181,7 @@ function logIn(inputForm){
 
 //populates page with user specific data 
 function renderProfileDetails(user){
-
+  
     //clears the profile pic cell in case there's already something there
     removeAllChildNodes(profilePicCell)
     removeAllChildNodes(profileDetailsCell)
@@ -209,7 +209,10 @@ function renderProfileDetails(user){
     profilePicCell.append(image)
 
     //high score cell's inner text
+    highScoreCell.id = "high-score-cell"
     highScoreCell.innerText = `High Score: ${(highestScore(user.games))}`
+
+    
 }
 
 
@@ -292,6 +295,7 @@ const saveGameHandler = function saveGame(){
     
     //remove option to react 
     reactionCell.innerText = ''
+    let highScoreButton = document.querySelector('#high-score-button')
 
     fetch(`${baseUrl}${gamesUrl}`, {
         method: "POST",
@@ -520,6 +524,8 @@ function highestScore(games){
 
 //renders reaction selection in reaction cell
 function renderReactionSelection(){
+
+    reactionCell.id = "reaction-cell"
 
     let selectionLabel = document.createElement('label')
     selectionLabel.innerText = "Reaction:"
