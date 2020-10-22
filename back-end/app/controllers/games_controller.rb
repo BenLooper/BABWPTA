@@ -7,7 +7,8 @@ class GamesController < ActionController::API
             reaction:params[:reaction], 
             user:user
             )
-        render json: game 
+        games = user.games
+        render json: games
     end 
 
 
