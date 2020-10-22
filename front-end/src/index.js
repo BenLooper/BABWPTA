@@ -4,6 +4,7 @@ const elementDetails = document.querySelectorAll('.at_details')
 const highScoreCell = document.querySelector("#high-cell")
 const profileDetailsCell = document.querySelector("#profile-cell")
 const reactionCell = document.querySelector('#reaction-cell')
+const profilePicCell = document.querySelector("#profile-pic-cell")
 
 //Session ID
 let sessionID 
@@ -29,6 +30,7 @@ const logoutCell = document.querySelector("#logout-cell")
 let logoutButton = document.createElement('button')
 logoutButton.innerText = "Logout"
 logoutButton.id = "logout-button"
+logoutButton.addEventListener('click', () => logout())
 logoutCell.append(logoutButton)
 
 //signup button
@@ -193,8 +195,7 @@ function renderProfileDetails(user){
     profileElement.append(profileDetailsDiv)
     profileDetailsCell.append(profileElement)
 
-    //profile pic cell
-    let profilePicCell = document.querySelector("#profile-pic-cell")
+
     let profilePicElement = document.createElement('div')
     // profilePicElement.className = "element"
 
@@ -306,6 +307,15 @@ const saveGameHandler = function saveGame(){
     .then(games => {
         highScoreCell.innerText = `High Score: ${(highestScore(games))}`
     })
+}
+
+//"logout" a user --> sets the session id to nil and removes all user specific stuff
+function logout(){
+    removeAllChildNodes(profilePicCell)
+    removeAllChildNodes(profileDetailsCell)
+    highScoreCell.innerText = ""
+    sessionID = null
+
 }
 
 
@@ -476,5 +486,11 @@ function createEl(el){
 }
 
 
+//removes all child nodes
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
 
 
