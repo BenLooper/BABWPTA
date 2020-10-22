@@ -10,8 +10,8 @@ let timerCell = document.querySelector('#timer-cell')
 timerCell.style.border = '0px'
 
 
-//Session ID
-let sessionID 
+// Stores current user info 
+let currentUser 
 
 //URLs
 const baseUrl = 'http://localhost:3000'
@@ -59,18 +59,7 @@ scoreButton.innerText = "Score: 0"
 scoreButton.id = "score-button"
 scoreCell.append(scoreButton)
 
-//edit profile button
-let editProfileButton = document.createElement('button')
-editProfileButton.innerText = "Profile"
-editProfileButton.id = "edit-profile-button"
-profileDetailsCell.append(editProfileButton)
 
-
-//edit game history button
-let viewGamesButton = document.createElement('button')
-viewGamesButton.innerText = "Games"
-viewGamesButton.id = "game-hist-button"
-gameHistoryCell.append(viewGamesButton)
 
 
 //sets up table for quiz mode 
@@ -133,6 +122,10 @@ function quizModeOff(runTimer){
 
 //Creates form to login with, currently appends the form to bottom of the table on button click
 function addLoginForm(){
+
+    // //clear table of any existing forms
+    // removeAllChildNodes(table)
+
     let form = createEl('form')
     form.id = 'login-form'
     form.addEventListener('submit', function(e){
@@ -176,9 +169,7 @@ function logIn(inputForm){
     .then(res=>res.json())
     .then(user => {
         if (!user.error) {
-            // console.log(user)
             renderProfileDetails(user);
-            sessionID = user.id
             inputForm.remove();
         }
         else{
@@ -190,36 +181,32 @@ function logIn(inputForm){
 
 //populates page with user specific data 
 function renderProfileDetails(user){
-    
-    // let profileElement = document.createElement('div')
-    // profileElement.className = "element"
 
-    // let profileDetailsDiv = document.createElement('div')
-    // profileDetailsDiv.className = "at_details"    
-    // let name = document.createElement('p')
-    // name.innerText = "Welcome, " + user.name + "!" + '\n' + "Click this tile to edit your profile"
-    
+    //clears the profile pic cell in case there's already something there
+    removeAllChildNodes(profilePicCell)
+    removeAllChildNodes(profileDetailsCell)
+    removeAllChildNodes(gameHistoryCell)
+
+    currentUser = user 
+
+    //edit game history button
+    let viewGamesButton = document.createElement('button')
+    viewGamesButton.innerText = "Games"
+    viewGamesButton.id = "game-hist-button"
+    gameHistoryCell.append(viewGamesButton)
+
+    //edit profile button
+    let editProfileButton = document.createElement('button')
+    editProfileButton.innerText = "Profile"
+    editProfileButton.id = "edit-profile-button"
+    editProfileButton.addEventListener('click', () => addEditForm())
+    profileDetailsCell.append(editProfileButton)
+
     let image = document.createElement('img')
     image.src = user.image_url
     image.id = "profile-pic"
-    
-    let username = createEl('p')
-    username.innerText = `Email: ${user.username}`
-    
-    profileDetailsDiv.append(description, name, username)
-    profileElement.append(profileDetailsDiv)
-    profileDetailsCell.append(profileElement)
 
-
-    let profilePicElement = document.createElement('div')
-    // profilePicElement.className = "element"
-
-    let profilePicDiv = document.createElement('div')
-    profilePicDiv.className = "at_details"
-
-    profilePicDiv.append(image)
-    profilePicElement.append(profilePicDiv)
-    profilePicCell.append(profilePicElement)
+    profilePicCell.append(image)
 
     //high score cell's inner text
     highScoreCell.innerText = `High Score: ${(highestScore(user.games))}`
@@ -281,7 +268,7 @@ function signUp(inputForm){
         body: JSON.stringify({
             username:inputForm.username.value,
             name: inputForm.name.value,
-            password: inputForm.pass.value,
+            password: inputForm.passInit.value,
             passConf: inputForm.passConf.value,
             image_url: inputForm.image.value
         })
@@ -289,7 +276,6 @@ function signUp(inputForm){
     .then(res=>res.json())
     .then(user => {
         renderProfileDetails(user);
-        sessionID = user.id
         inputForm.remove();
     })
 }
@@ -316,24 +302,92 @@ const saveGameHandler = function saveGame(){
         body: JSON.stringify({
             "score": finalScore,
             "reaction": reaction,
-            "user_id": sessionID
+            "user_id": currentUser.id
         })
     })
     .then(res => res.json())
     .then(games => {
         highScoreCell.innerText = `High Score: ${(highestScore(games))}`
+        currentUser.games = games
     })
 }
+
+function addEditForm(){
+    let form = createEl('form')
+    form.id = 'login-form'
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        editProfile(e.target);
+    })
+
+    let userNameInput = createEl('input')
+    userNameInput.id = 'username'
+    userNameInput.type = 'text'
+    userNameInput.value = currentUser.username
+
+    let nameInput = createEl('input')
+    nameInput.id = 'name'
+    nameInput.type = 'text'
+    nameInput.value = currentUser.name
+
+    let imageInput = createEl('input')
+    imageInput.id = 'image'
+    imageInput.type = 'text' 
+    imageInput.value = currentUser.image_url
+
+    let submit = createEl('input')
+    submit.type = 'submit'
+    submit.value = 'Update Profile'
+    submit.id = "create-submit-btn"
+
+    let delBtn = createEl('input')
+    delBtn.type = 'button'
+    delBtn.value = 'Delete Account'
+    delBtn.id = "create-submit-btn"
+    delBtn.addEventListener('click', () => delUser())
+
+    form.append(userNameInput,nameInput,imageInput,submit,delBtn)
+    table.append(form)
+}
+
+
+function editProfile(inputForm){
+    fetch(`${baseUrl}${usersUrl}/${currentUser.id}`, {
+        method:"PATCH",
+        headers: {
+            "Content-Type":"application/json",
+            Accept:"application/json"
+        },
+        body: JSON.stringify({
+            username:inputForm.username.value,
+            name: inputForm.name.value,
+            image_url: inputForm.image.value
+        })
+    })
+    .then(res=>res.json())
+    .then(user => {
+        renderProfileDetails(user);
+        inputForm.remove();
+    })
+}
+
 
 //"logout" a user --> sets the session id to nil and removes all user specific stuff
 function logout(){
     removeAllChildNodes(profilePicCell)
     removeAllChildNodes(profileDetailsCell)
+    removeAllChildNodes(gameHistoryCell)
     highScoreCell.innerText = ""
     sessionID = null
-
 }
 
+//permanently delete user from DB
+function delUser(){
+    fetch(`${baseUrl}${usersUrl}/${currentUser.id}`, {
+        method:"DELETE"
+    })
+    .then(logout)
+}
 
 //---------------------//
 //HELPER FUNCTIONS --> These are used in the "big" functions above and interact with each other somewhat as well
