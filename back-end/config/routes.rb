@@ -4,5 +4,6 @@ Rails.application.routes.draw do
 
   post '/sessions', to: "sessions#create"
 
+  post '/games', to: 'games#create'
 end
 
