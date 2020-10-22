@@ -5,6 +5,8 @@ const highScoreCell = document.querySelector("#high-cell")
 const profileDetailsCell = document.querySelector("#profile-cell")
 const reactionCell = document.querySelector('#reaction-cell')
 const profilePicCell = document.querySelector("#profile-pic-cell")
+let timerCell = document.querySelector('#timer-cell')
+timerCell.style.border = '0px'
 
 //Session ID
 let sessionID 
@@ -61,9 +63,12 @@ scoreCell.append(scoreButton)
 //sets up table for quiz mode 
 function quizModeOn(){
 
+    //Border timer cell
+    timerCell.style.border = '2px solid rgba(0, 160, 96, 0.9)'
+
     //start the timer 
-    let thirtySeconds = 10,
-    timerCell = document.querySelector('#timer-cell');
+    let thirtySeconds = 10
+    
     startTimer(thirtySeconds, timerCell);
 
     //Set the score to zero
