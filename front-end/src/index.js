@@ -189,9 +189,9 @@ function logIn(inputForm){
         else{
             let form = createEl('form')
             form.id = 'message-form'
-            form.innerText = user.error
+            form.innerText = "Incorrect user or password"
             inputForm.append(form)
-            setTimeout(() => inputForm.removeChild(form),3000)
+            setTimeout(() => {inputForm.removeChild(form)},3000)
         }
     })
 }
