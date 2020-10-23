@@ -63,12 +63,9 @@ scoreCell.append(scoreButton)
 let titleCell = document.querySelector('#title-cell')
 let titleImage = document.createElement("img")
 console.log(titleImage)
-titleImage.src = "/Users/admin/Flatiron/code/BABWPTA-5/valence-image.jpg"
+titleImage.src = "/Users/admin/Flatiron/code/BABWPTA-5/valence-image-dark.jpg"
 titleImage.id = "title-image"
 titleCell.append(titleImage)
-
-
-
 
 //sets up table for quiz mode 
 function quizModeOn(){
