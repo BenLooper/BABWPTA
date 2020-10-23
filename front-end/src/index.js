@@ -1,11 +1,18 @@
 //Global Variables
 const table = document.querySelector('.periodic')
 const elementDetails = document.querySelectorAll('.at_details')
-const highScoreCell = document.querySelector("#high-cell")
+
 const profileDetailsCell = document.querySelector("#profile-cell")
-const reactionCell = document.querySelector('#reaction-cell')
 const profilePicCell = document.querySelector("#profile-pic-cell")
 const gameHistoryCell = document.querySelector("#game-hist-cell")
+
+const promptCellSelect = document.querySelector("#select")
+const promptCellElement = document.querySelector("#select-element")
+const reactionCell = document.querySelector('#reaction-cell')
+const highScoreCell = document.querySelector("#high-cell")
+const scoreCell = document.querySelector("#score-cell")
+let scoreButton = document.createElement('button')
+scoreButton.id = "score-button"
 let timerCell = document.querySelector('#timer-cell')
 timerCell.style.border = '0px'
 
@@ -52,17 +59,11 @@ gameButton.id = "game-button"
 gameButton.addEventListener('click', () => quizModeOn())
 gameCell.append(gameButton)
 
-//score button
-const scoreCell = document.querySelector("#score-cell")
-let scoreButton = document.createElement('button')
-scoreButton.innerText = "Score: 0"
-scoreButton.id = "score-button"
-scoreCell.append(scoreButton)
-
 //title image
 let titleCell = document.querySelector('#title-cell')
 let titleImage = document.createElement("img")
 console.log(titleImage)
+
 titleImage.src = "/Users/admin/Flatiron/code/BABWPTA-6/valence-image-dark.jpg"
 titleImage.id = "title-image"
 titleCell.append(titleImage)
@@ -77,6 +78,12 @@ function quizModeOn(){
     let thirtySeconds = 10
     
     startTimer(thirtySeconds, timerCell);
+
+    promptCellSelect.innerText = "Select the"
+    promptCellElement.innerText = "element:  "
+
+    
+    scoreCell.append(scoreButton)
 
     //Set the score to zero
     scoreButton.innerText = "Score: 0"
@@ -200,8 +207,16 @@ function renderProfileDetails(user){
     viewGamesButton.innerText = "Games"
     viewGamesButton.id = "game-hist-button"
     viewGamesButton.addEventListener('click', function(){
+        if (currentUser.games.length > 0){
         for (const game of currentUser.games){
             addGamesForm(game);
+        }}
+        else{
+            removeForms();
+            let form = createEl('form')
+            form.id = 'login-form'
+            form.innerText = "You don't have any games saved. Play a game to see it here!"
+            table.append(form)
         }
     })
     gameHistoryCell.append(viewGamesButton)
@@ -222,6 +237,7 @@ function renderProfileDetails(user){
     //high score cell's inner text
     highScoreCell.id = "high-score-cell"
     highScoreCell.innerText = `High Score: ${(highestScore(user.games))}`
+    highScoreCell.style.border = '2px solid rgba(0, 160, 96, 0.9)'
 
 }
 
@@ -304,11 +320,21 @@ const saveGameHandler = function saveGame(){
     let reaction = reactionCell.children[1].value
     
     //get ending score 
+    let scoreButton = document.querySelector('#score-button')
     let finalScore = parseInt(scoreButton.innerText.match(/\d/))
     
     //remove option to react 
     reactionCell.innerText = ''
     let highScoreButton = document.querySelector('#high-score-button')
+
+    //clear quiz mode stuff 
+    timerCell.innerText = ''
+    timerCell.style.border = '0px'
+    removeAllChildNodes(scoreCell);
+    promptCellSelect.innerText = ''
+    promptCellElement.innerText = ''
+    let answer = document.querySelector('#answer-cell')
+    answer.innerText = ''
 
     fetch(`${baseUrl}${gamesUrl}`, {
         method: "POST",
@@ -458,7 +484,13 @@ function logout(){
     removeAllChildNodes(gameHistoryCell)
     removeForms();
     highScoreCell.innerText = ""
+    highScoreCell.style.border = '0px'
     sessionID = null
+    let form = createEl('form')
+    form.id = 'login-form'
+    form.innerText = "Logged out, goodbye!"
+    table.append(form)
+    setTimeout(removeForms,3000)
 }
 
 
@@ -490,6 +522,11 @@ function delGame(game){
     .then(user => {
         currentUser = user
         removeForms();
+        let form = createEl('form')
+        form.id = 'login-form'
+        form.innerText = "Game Deleted"
+        table.append(form)
+        setTimeout(() => {table.removeChild(form)},3000)
         for (const game of currentUser.games){
             addGamesForm(game);
         }
