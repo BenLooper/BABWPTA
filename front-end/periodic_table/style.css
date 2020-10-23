@@ -141,6 +141,28 @@ body {
   border-radius: 3px;
 }
 
+#reaction-cell {
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  padding: 15px 15px;
+  background-color: #16161a;
+  color: #444444;
+  transition-duration: 0.4s;
+  border-radius: 3px;
+}
+
+#drop-down {
+  background-color: #16161a;
+  border-radius: 3px;
+}
+
+#drop-down-items {
+  background-color: DodgerBlue;
+}
+
 /* login form */
 #user {
   border: none;
@@ -299,6 +321,17 @@ body {
 #select-element {
   text-align: left;
   padding: 18px 2px;
+}
+
+#title-cell {
+  font-family: Arial;
+  font-size: 45px;
+  color: #444444;
+}
+
+#title-image {
+  width: 240px;
+  height: 55px;
 }
 
 /* user buttons */
