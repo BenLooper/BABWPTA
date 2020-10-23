@@ -124,7 +124,7 @@ function quizModeOff(runTimer){
 function addLoginForm(){
 
     // //clear table of any existing forms
-    // removeAllChildNodes(table)
+    removeForms();
 
     let form = createEl('form')
     form.id = 'login-form'
@@ -186,6 +186,7 @@ function renderProfileDetails(user){
     removeAllChildNodes(profilePicCell)
     removeAllChildNodes(profileDetailsCell)
     removeAllChildNodes(gameHistoryCell)
+    removeForms();
 
     currentUser = user 
 
@@ -193,6 +194,11 @@ function renderProfileDetails(user){
     let viewGamesButton = document.createElement('button')
     viewGamesButton.innerText = "Games"
     viewGamesButton.id = "game-hist-button"
+    viewGamesButton.addEventListener('click', function(){
+        for (const game of currentUser.games){
+            addGamesForm(game);
+        }
+    })
     gameHistoryCell.append(viewGamesButton)
 
     //edit profile button
@@ -212,12 +218,14 @@ function renderProfileDetails(user){
     highScoreCell.id = "high-score-cell"
     highScoreCell.innerText = `High Score: ${(highestScore(user.games))}`
 
-    
 }
 
 
 //Creates form to login with, currently appends the form to bottom of the table on button click
 function addSignUpForm(){
+
+    removeForms();
+
     let form = createEl('form')
     form.id = 'login-form'
     form.addEventListener('submit', function(e){
@@ -316,7 +324,11 @@ const saveGameHandler = function saveGame(){
     })
 }
 
+
 function addEditForm(){
+
+    removeForms();
+
     let form = createEl('form')
     form.id = 'login-form'
     form.addEventListener('submit', function(e){
@@ -375,23 +387,106 @@ function editProfile(inputForm){
     })
 }
 
+//makes a form for a given game instance, can change reaction or delete game record
+function addGamesForm(game){
+
+    removeForms();
+
+    let form = createEl('form')
+    form.id = 'login-form'
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        editGame(e.target,game.id);
+    })
+
+    let score = createEl('span')
+    score.id = 'score'
+    score.innerText = game.score
+
+    let reactions = ['😤', '🤓', '🤬', '😩', '😭', '😎']
+    let reactionSelection = makeReactionList(reactions,game.reaction)
+    reactionSelection.id = 'reaction'
+
+    let submit = createEl('input')
+    submit.type = 'submit'
+    submit.value = 'Update Reaction'
+    submit.id = "create-submit-btn"
+
+    let delBtn = createEl('input')
+    delBtn.type = 'button'
+    delBtn.value = 'Delete Game'
+    delBtn.id = "create-submit-btn"
+    delBtn.addEventListener('click', () => delGame(game))
+
+    form.append(score,reactionSelection,submit,delBtn)
+    table.append(form)
+}
+
+
+function editGame(inputForm,gameID){
+    fetch(`${baseUrl}${gamesUrl}/${gameID}`, {
+        method:"PATCH",
+        headers: {
+            "Content-Type":"application/json",
+            Accept:"application/json"
+        },
+        body: JSON.stringify({
+            reaction: inputForm.reaction.value,
+        })
+    })
+    .then(res=>res.json())
+    .then(user => {
+        inputForm.append(`Reaction updated`)
+        currentUser = user
+    })
+}
+
 
 //"logout" a user --> sets the session id to nil and removes all user specific stuff
 function logout(){
     removeAllChildNodes(profilePicCell)
     removeAllChildNodes(profileDetailsCell)
     removeAllChildNodes(gameHistoryCell)
+    removeForms();
     highScoreCell.innerText = ""
     sessionID = null
 }
+
 
 //permanently delete user from DB
 function delUser(){
     fetch(`${baseUrl}${usersUrl}/${currentUser.id}`, {
         method:"DELETE"
     })
-    .then(logout)
+    .then(() => {
+        removeForms();
+        logout();
+    })
 }
+
+
+//permanently delete game from DB
+function delGame(game){
+    fetch(`${baseUrl}${gamesUrl}/${game.id}`, {
+        method:"DELETE",
+        headers: {
+            "Content-Type":"application/json",
+            Accept:"application/json"
+        },
+        body: JSON.stringify({
+            user: currentUser.id
+        })
+    })
+    .then(res=>res.json())
+    .then(user => {
+        currentUser = user
+        removeForms();
+        for (const game of currentUser.games){
+            addGamesForm(game);
+        }
+    })
+}
+
 
 //---------------------//
 //HELPER FUNCTIONS --> These are used in the "big" functions above and interact with each other somewhat as well
@@ -537,12 +632,15 @@ function renderReactionSelection(){
 }
 
 //given an array of strings, makes a selection list of those items
-function makeReactionList(reactions){
+function makeReactionList(reactions,selected=""){
     let select = document.createElement('select')
     
     for (const reaction of reactions){
         let option = document.createElement('option')
         option.innerText = reaction 
+        if (option.innerText == selected){
+            option.selected = true
+        }
         select.append(option)
     }
 
@@ -570,3 +668,9 @@ function removeAllChildNodes(parent) {
 }
 
 
+//removes all forms from bottom of table
+function removeForms(){
+    while (table.lastElementChild.id == "login-form"){
+        table.removeChild(table.lastElementChild)
+        }
+}
