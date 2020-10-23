@@ -71,6 +71,8 @@ titleCell.append(titleImage)
 //sets up table for quiz mode 
 function quizModeOn(){
 
+    removeForms();
+
     //Border timer cell
     timerCell.style.border = '2px solid rgba(0, 160, 96, 0.9)'
 
@@ -185,7 +187,11 @@ function logIn(inputForm){
             inputForm.remove();
         }
         else{
-            inputForm.append(user.error)
+            let form = createEl('form')
+            form.id = 'message-form'
+            form.innerText = user.error
+            inputForm.append(form)
+            setTimeout(() => inputForm.removeChild(form),3000)
         }
     })
 }
@@ -208,13 +214,14 @@ function renderProfileDetails(user){
     viewGamesButton.id = "game-hist-button"
     viewGamesButton.addEventListener('click', function(){
         if (currentUser.games.length > 0){
-        for (const game of currentUser.games){
-            addGamesForm(game);
-        }}
+            removeForms();
+            for (const game of currentUser.games){
+                addGamesForm(game);
+            }}
         else{
             removeForms();
             let form = createEl('form')
-            form.id = 'login-form'
+            form.id = 'message-form'
             form.innerText = "You don't have any games saved. Play a game to see it here!"
             table.append(form)
         }
@@ -415,13 +422,16 @@ function editProfile(inputForm){
     .then(user => {
         renderProfileDetails(user);
         inputForm.remove();
+        let form = createEl('form')
+        form.id = 'message-form'
+        form.innerText = "Profile Updated"
+        table.append(form)
+        setTimeout(removeForms,3000)
     })
 }
 
 //makes a form for a given game instance, can change reaction or delete game record
 function addGamesForm(game){
-
-    removeForms();
 
     let form = createEl('form')
     form.id = 'login-form'
@@ -471,7 +481,11 @@ function editGame(inputForm,gameID){
     })
     .then(res=>res.json())
     .then(user => {
-        inputForm.append(`Reaction updated`)
+        let form = createEl('form')
+        form.id = 'message-form'
+        form.innerText = "Reaction Updated"
+        inputForm.append(form)
+        setTimeout(() => inputForm.removeChild(form),3000)
         currentUser = user
     })
 }
@@ -487,7 +501,7 @@ function logout(){
     highScoreCell.style.border = '0px'
     sessionID = null
     let form = createEl('form')
-    form.id = 'login-form'
+    form.id = 'message-form'
     form.innerText = "Logged out, goodbye!"
     table.append(form)
     setTimeout(removeForms,3000)
@@ -501,7 +515,11 @@ function delUser(){
     })
     .then(() => {
         removeForms();
+        let form = createEl('form')
+        form.id = 'message-form'
         logout();
+        form.innerText = "User Deleted"
+        table.append(form)
     })
 }
 
@@ -523,7 +541,7 @@ function delGame(game){
         currentUser = user
         removeForms();
         let form = createEl('form')
-        form.id = 'login-form'
+        form.id = 'message-form'
         form.innerText = "Game Deleted"
         table.append(form)
         setTimeout(() => {table.removeChild(form)},3000)
@@ -570,6 +588,10 @@ const checkHandler = function checkAnswer(selected){
     //if the name matches the answer, increase the score and assign a new element to find
     if (element.innerText.match(letters).join('') == answer.innerText.toLowerCase()){
         
+        //change color of tile for 1 second
+        element.parentElement.style.backgroundColor = 'yellow'
+        setTimeout(() => {element.parentElement.style.backgroundColor = ''}, 500)
+
         //this looks confusing -- all it's doing is finding the number in "Score: 1" and incrementing it 
         let currentScore = parseInt(scoreButton.innerText.match(/\d/))
         scoreButton.innerText = scoreButton.innerText.replace(/\d/, (currentScore + 1))
@@ -579,7 +601,8 @@ const checkHandler = function checkAnswer(selected){
 
     //else it turns the element red or something idk
     else{
-        console.log('nope')
+        element.parentElement.style.backgroundColor = 'red'
+        setTimeout(() => {element.parentElement.style.backgroundColor = ''}, 500)
     }
 }
    
@@ -718,7 +741,7 @@ function removeAllChildNodes(parent) {
 
 //removes all forms from bottom of table
 function removeForms(){
-    while (table.lastElementChild.id == "login-form"){
+    while (table.lastElementChild.id == "login-form" || table.lastElementChild.id == "message-form" ){
         table.removeChild(table.lastElementChild)
         }
 }
