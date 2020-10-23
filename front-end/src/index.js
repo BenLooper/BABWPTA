@@ -59,8 +59,13 @@ scoreButton.innerText = "Score: 0"
 scoreButton.id = "score-button"
 scoreCell.append(scoreButton)
 
-
-
+//title image
+let titleCell = document.querySelector('#title-cell')
+let titleImage = document.createElement("img")
+console.log(titleImage)
+titleImage.src = "/Users/admin/Flatiron/code/BABWPTA-5/valence-image-dark.jpg"
+titleImage.id = "title-image"
+titleCell.append(titleImage)
 
 //sets up table for quiz mode 
 function quizModeOn(){
@@ -634,9 +639,11 @@ function renderReactionSelection(){
 //given an array of strings, makes a selection list of those items
 function makeReactionList(reactions,selected=""){
     let select = document.createElement('select')
+    select.id = "drop-down"
     
     for (const reaction of reactions){
         let option = document.createElement('option')
+        option.id = "drop-down-items"
         option.innerText = reaction 
         if (option.innerText == selected){
             option.selected = true
