@@ -77,7 +77,7 @@ function quizModeOn(){
     timerCell.style.border = '2px solid rgba(0, 160, 96, 0.9)'
 
     //start the timer 
-    let thirtySeconds = 10
+    let thirtySeconds = 30
     
     startTimer(thirtySeconds, timerCell);
 
@@ -649,7 +649,7 @@ function assignRandomElement(names){
     //populate answer-cell with a randomly indexed element from the names array
     let answer = document.querySelector('#answer-cell')
     //randomly selects by doing (length - somenumber) -- 70 here to make it easier
-    answer.innerText = (names[getRandomInt(names.length-70)])
+    answer.innerText = (names[getRandomInt(names.length-100)])
 
     //this capitalizes the word...I only did this because I knew it'd drive you crazy if it was all lowercase
     answer.innerText = answer.innerText.replace(answer.innerText[0],answer.innerText[0].toUpperCase())

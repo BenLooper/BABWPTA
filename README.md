@@ -1,36 +1,32 @@
 
-## Possible App Names:
-- elemental
-- BABWPTA
-- periodic
-- science, competitiveness, learning-based, etc.
-- Valence
-- 
-- 
-#
+# valence.
+
 ### Technical Description: 
-description here
+A single-page web application with CRUD functioning, utilizing:
+* Interactivity (with JavaScript)
+* Application Programming Interface (via Ruby on Rails)
+* Object Relational Mapping (with ActiveRecord)
+* SQL Databases (using sqlite3)
+* Login Password Encryption
 
 ### App Description:
-description here
+Valence is a gamified, interactive study tool for learning the periodic table of the elements. It was inspired by its creators, who share a love for science and games.
 
------
-## Instructions:
-### Click [here](http://localhost:3000/) to begin the application!
-----
+#
 
 ## Models & Relationships
+<br>
 
-### User | Game Session 
+        User | Game Session
 
-<br />
 
 ### User <br />
 * A User has many Game Sessions <br />
 
 ### Game Session <br />
 * A Game Session belongs to a User <br />
-----
+
+#
 
 ## SQL Database Table Properties
 ### User Table Properties
@@ -41,12 +37,11 @@ description here
 * Password Digest (authentication)
 
 ### Games Table Properties 
-* Score (fixed)
-* Duration (fixed)
-* Reaction (can change)
+* Score
+* Reaction
 * Foreign Key (User)
 
---------
+#
 
 ## CRUD Functionality, aka User Stories
 "." Designates class methods | "#" Designates instance methods
@@ -54,30 +49,26 @@ description here
 ### Create
 * User can create a new User account
 
-        UsersController#new
         UsersController#create
 * User can create a reaction following a Game session
         
-        GamesController#new
         GamesController#create
 
 #
 ### Read
 * User can view User account details
 
-        UsersController#show
+        SessionsController#create
 * User can view Game session details
 
-        GamesController#show
+        SessionsController#create
 #
 ### Update
 * User can update User account details
 
-        UsersController#edit
         UsersController#update
 * User can update their reaction for a Game
 
-        GamesController#edit
         GamesController#update
 #
 ### Delete:
@@ -88,28 +79,6 @@ description here
 
         GamesController#destroy
 
-#
-## Techincal-Specific Tasks:
-* User's highest streak 
-* On hover displays:
-  * Element number
-  * full name,
-  * group name (ex: Noble Gases), 
-  * mass,
-  * image showing valence electrons
-
-## Styling-Specific Tasks:
-* Hover feature on learning page (landing page) that displays info about an element
-* Hover changes color of element so you know you're looking at a specific one 
-* Colorized periodic tables by element 
-* Timing feature during Game (30 seconds)
-* Fancy loading feature ("exhales" info onto page)
-#
-## Additional Methods, aka Stretch Goals:
-
-* Multiple Difficuly Levels (easy, medium, hard)
-
-* Index Page of all games (high score page)
 
 #
 ## Related Information
@@ -119,46 +88,21 @@ description here
  [Video Demo Link](https://video.com/blahblahblah)
 
 ### Difficulties/Things Learned:
-* 
+* Approaching core functionality and achieve it, both on front- and back-end
+* Using a Grid Layout/Skeleton/Template
+* Front-end workflow with JavaScript
+* Having an understanding of Javascript to fully utilize CSS
+  * CSS syntax and overall display
 
 ### Changes/Modifications/Additions:
-* 
-
+* Multiple Difficuly Levels (easy, medium, hard)
+* Index Page of all games of all Users (high score page)
+* "Start Game" Button, when clicked twice, pauses timer
+* Organization of Javascript file(s)
+  * Separation of Responsibilites
 
 ### Highlights
-* 
-
------
-
-monday (planning)
-- create readme
-- think of app name
-- clean up related information
-- complete technical and app description
-- add stretch goals to readme
-- map out navigation of index/show/new/edit pagesn
-
-tuesday (functionality)
-- build models, migrations, seeds, controllers, views
-- work on model methods
-- work on controllers & show pages
-- change name of rails lab, if possible
-
-wednesday (dry code & aesthetics)
-- clean up navagation
-- work on simple login validation
-- DRY (partials, before_action, etc.)
-- authentificaion? cookies & sessions?
-- front-end focus on HTML/CSS/Bootstrap
-
-thursday (finishing up)
-- specify route resources
-- finish any back-or front end
-- add more seeds for walkthrough, if needed
-- finish things learned/highlights/difficulties, etc
-- create walkthrough to record
-
-friday (presenting)
-- record walkthrough
-- update readme with any changes
-- Present
+* Github Workflow
+  * Github Projects (cards to delegate tasks)
+* Overall Task Delegation between Styling and Functionality
+  * Each partner building on previous ideas of the other; scaffolding
