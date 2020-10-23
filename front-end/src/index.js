@@ -63,7 +63,8 @@ gameCell.append(gameButton)
 let titleCell = document.querySelector('#title-cell')
 let titleImage = document.createElement("img")
 console.log(titleImage)
-titleImage.src = "/Users/ben/flatiron/work/mod3frontend/section2/mod3Project/valence-image-dark.jpg"
+
+titleImage.src = "/Users/admin/Flatiron/code/BABWPTA-6/valence-image-dark.jpg"
 titleImage.id = "title-image"
 titleCell.append(titleImage)
 
@@ -389,10 +390,10 @@ function addEditForm(){
     let delBtn = createEl('input')
     delBtn.type = 'button'
     delBtn.value = 'Delete Account'
-    delBtn.id = "create-submit-btn"
+    delBtn.id = "delete-user-btn"
     delBtn.addEventListener('click', () => delUser())
 
-    form.append(userNameInput,nameInput,imageInput,submit,delBtn)
+    form.append(nameInput, userNameInput, imageInput, submit, delBtn)
     table.append(form)
 }
 
@@ -430,8 +431,12 @@ function addGamesForm(game){
     })
 
     let score = createEl('span')
-    score.id = 'score'
-    score.innerText = game.score
+    score.id = 'high-score-history'
+    score.innerText = `Score: ${game.score}`
+
+    let reactionLabel = document.createElement('span')
+    reactionLabel.id = 'reaction-label'
+    reactionLabel.innerText = "Reaction: "
 
     let reactions = ['😤', '🤓', '🤬', '😩', '😭', '😎']
     let reactionSelection = makeReactionList(reactions,game.reaction)
@@ -440,15 +445,15 @@ function addGamesForm(game){
     let submit = createEl('input')
     submit.type = 'submit'
     submit.value = 'Update Reaction'
-    submit.id = "create-submit-btn"
+    submit.id = "update-reaction-btn"
 
     let delBtn = createEl('input')
     delBtn.type = 'button'
     delBtn.value = 'Delete Game'
-    delBtn.id = "create-submit-btn"
+    delBtn.id = "hist-delete-btn"
     delBtn.addEventListener('click', () => delGame(game))
 
-    form.append(score,reactionSelection,submit,delBtn)
+    form.append(score,reactionLabel, reactionSelection,submit,delBtn)
     table.append(form)
 }
 

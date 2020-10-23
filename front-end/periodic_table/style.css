@@ -376,6 +376,105 @@ body {
   box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5);
 }
 
+/* game history form */
+#high-score-history {
+  border: none;
+  /* border-bottom: 1px solid rgba(0, 160, 96, 0.9); */
+  background-color: #16161a;
+  color:#444444;
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+  width: 13%;
+  margin: 30px;
+  transition-duration: 0.4s;
+}
+
+#reaction-label {
+  border: none;
+  /* border-bottom: 1px solid rgba(0, 160, 96, 0.9); */
+  background-color: #16161a;
+  color:#444444;
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+  width: 13%;
+  /* margin: 30px; */
+  transition-duration: 0.4s;
+}
+
+#reaction {
+  background-color: #16161a;
+  border-radius: 3px;
+  margin: 5px;
+}
+
+#update-reaction-btn {
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  background-color: #16161a;
+  color: #444444;
+  border: 2px solid rgba(0, 160, 96, 0.9);
+  cursor:pointer;
+  transition-duration: 0.4s;
+  border-radius: 3px;
+  margin: 30px;
+}
+
+#update-reaction-btn:hover {
+  background-color: rgba(0, 128, 128, 0.9);
+  color: white;
+  box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5);
+}
+
+#hist-delete-btn{
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  background-color: #16161a;
+  color: #444444;
+  border: 2px solid rgba(0, 160, 96, 0.9);
+  cursor:pointer;
+  transition-duration: 0.4s;
+  border-radius: 3px;
+  /* margin: 10px; */
+}
+
+#hist-delete-btn:hover {
+  background-color: rgba(0, 128, 128, 0.9);
+  color: white;
+  box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5);
+}
+
+/* edit user profile */
+
+#delete-user-btn {
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  background-color: #16161a;
+  color: #444444;
+  border: 2px solid rgba(0, 160, 96, 0.9);
+  cursor:pointer;
+  transition-duration: 0.4s;
+  border-radius: 3px;
+  margin: 30px;
+}
+
+#delete-user-btn:hover {
+  background-color: rgba(0, 128, 128, 0.9);
+  color: white;
+  box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5);
+}
+
+
 .periodic {
   position: relative;
   height: 200px;
